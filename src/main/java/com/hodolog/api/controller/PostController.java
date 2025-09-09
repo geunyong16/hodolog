@@ -1,22 +1,17 @@
 package com.hodolog.api.controller;
 
-import com.hodolog.api.domain.Post;
+import com.hodolog.api.exception.InvalidRequest;
 import com.hodolog.api.request.PostCreate;
+import com.hodolog.api.request.PostEdit;
+import com.hodolog.api.request.PostSearch;
 import com.hodolog.api.response.PostResponse;
 import com.hodolog.api.service.PostService;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -27,6 +22,8 @@ public class PostController {
 
     @PostMapping("/posts")
     public void post(@Valid @RequestBody PostCreate request) {
+        if(request.getTitle().contains("바보"))
+            throw new InvalidRequest();
         postService.write(request);
     }
 
@@ -36,13 +33,23 @@ public class PostController {
      */
 
     @GetMapping("/posts/{postId}")
-    public PostResponse get(@PathVariable Long postId){
+    public PostResponse get(@PathVariable Long postId) {
         PostResponse PostResponse = postService.get(postId);
         return PostResponse;
     }
 
     @GetMapping("/posts")
-    public List<PostResponse> getList(Pageable pageable){
-        return postService.getList(pageable);
+    public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
+        return postService.getList(postSearch);
+    }
+
+    @PatchMapping("/posts/{postId}")
+    public void edit(@PathVariable Long postId, @Valid @RequestBody PostEdit request) {
+        postService.edit(postId, request);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public void delete(@PathVariable Long postId) {
+        postService.delete(postId);
     }
 }

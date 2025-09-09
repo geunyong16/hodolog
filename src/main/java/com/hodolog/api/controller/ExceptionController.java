@@ -1,5 +1,7 @@
 package com.hodolog.api.controller;
 
+import com.hodolog.api.exception.HodologException;
+import com.hodolog.api.exception.PostNotFound;
 import com.hodolog.api.response.ErrorResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,5 +29,16 @@ public class ExceptionController {
             errorResponses.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
         }
         return errorResponses;
+    }
+
+    @ResponseBody
+    @ExceptionHandler(HodologException.class)
+    public ErrorResponses HodologException(HodologException e) {
+        ErrorResponses response = ErrorResponses.builder()
+                .code("404")
+                .message(e.getMessage())
+                .build();
+
+        return response;
     }
 }
