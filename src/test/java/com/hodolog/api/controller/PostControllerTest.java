@@ -265,7 +265,7 @@ class PostControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/posts")
                         .contentType(APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 }

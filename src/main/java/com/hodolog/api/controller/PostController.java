@@ -22,8 +22,7 @@ public class PostController {
 
     @PostMapping("/posts")
     public void post(@Valid @RequestBody PostCreate request) {
-        if(request.getTitle().contains("바보"))
-            throw new InvalidRequest();
+        request.validate();
         postService.write(request);
     }
 

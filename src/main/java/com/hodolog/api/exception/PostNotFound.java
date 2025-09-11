@@ -13,7 +13,7 @@ public class PostNotFound extends HodologException {
     }
 
     @Override
-    public int statusCode() {
+    public int getStatusCode() {
         return 404;
     }
 }

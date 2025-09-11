@@ -23,12 +23,13 @@ public class ErrorResponses {
 
     private final String code;
     private final String message;
-    private Map<String,String> validation=new HashMap<>();
+    private final Map<String,String> validation;
 
     @Builder
-    public ErrorResponses(String message, String code) {
+    public ErrorResponses(String message, String code, Map<String,String> validation) {
         this.message = message;
         this.code = code;
+        this.validation = validation != null ? validation : new HashMap<>();
     }
 
     public void addValidation(String fieldName, String errorsMessage){
